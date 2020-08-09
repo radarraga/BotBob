@@ -43,20 +43,14 @@ bot.on('message', msg => {
 
     
         default:
-            var embed = new Discord.MessageEmbed()
-                .setColor('#222222')
-                .setTitle('Verkackt')
-                .addField(
-                    "Ich hab verkackt", "Ah, ich hab' verkackt, mir ist egal \n Sollen die alle schwanger werden, Bruder, ich bezahl' \n" + 
-                    "Und ja, was soll ich sagen? Hab' schon tausend mal verkackt \n  Sag' ihnen, ich werde mich ändern und die kaufen mir das ab, Gzuz", false
-                )
-            msg.channel.send(embed);
+            msg.channel.send("Ah, ich hab' verkackt, mir ist egal");
 
             var channel = msg.member.voice.channel;
 
             channel.join().then(connection => {
                 const dispatcher = connection.play('./Audio/Verkackt.mp3');
-                dispatcher.on("end", end =>
+                dispatcher.setVolume(0.4);
+                dispatcher.on("finish", end =>
                 {
                     channel.leave();
                 });
