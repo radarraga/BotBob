@@ -43,28 +43,30 @@ bot.on('message', msg => {
             break;
         
         case 'kollegah':
-            var channel = msg.member.voice.channel;
             var track = './Audio/Kollegah' + Math.floor(Math.random() * 5) + '.mp3';
-            PlayMedia(channel, track);
+            PlayMedia(msg, track);
             break;
         
         case 'hi':
-            var channel = msg.member.voice.channel;
-            PlayMedia(channel, './Audio/hi.mp3');
+            PlayMedia(msg, './Audio/hi.mp3');
+            break;
+
+        case 'nice':
+            var track = './Audio/nice' + Math.floor(Math.random() * 6) + '.mp3';
+            PlayMedia(msg, track);
             break;
 
     
         default:
             msg.channel.send("Ah, ich hab' verkackt, mir ist egal");
-            var channel = msg.member.voice.channel;
-
-            PlayMedia(channel, './Audio/Verkackt.mp3');
+            PlayMedia(msg, './Audio/Verkackt.mp3');
 	        break;
     }
 });
 
 
-function PlayMedia(channel, file){
+function PlayMedia(msg, file){
+    var channel = msg.member.voice.channel;
     if(channel != null && isPlaying === false){
         channel.join().then(connection => {
             const dispatcher = connection.play(file);
