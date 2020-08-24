@@ -41,7 +41,7 @@ bot.on('message', msg => {
 
         case 'wetter':
             const options = {
-                url: 'https://api.openweathermap.org/data/2.5/weather?lat=47.498&lon=8.278&appid=ca4b66e82320e75865febcaba583b24a',
+                url: 'https://api.openweathermap.org/data/2.5/weather?lat=47.498&lon=8.278&appid=' + process.env.OPEN_WEATHER_API,
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
