@@ -59,7 +59,7 @@ bot.on('message', msg => {
     
         default:
             msg.channel.send("Ah, ich hab' verkackt, mir ist egal");
-            PlayMedia(msg, './Audio/Verkackt.mp3');
+            PlayMedia(msg, './Audio/Verkackt.mp3', 0.3);
 	        break;
     }
 });
