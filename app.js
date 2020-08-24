@@ -6,6 +6,7 @@ const { connect } = require('http2');
 require('dotenv').config({path: __dirname + '/.env'});
 bot.login(process.env.TOKEN);
 
+
 bot.on('ready', () =>{
     console.info(`Logged in as ${bot.user.tag}`);
 });
@@ -26,7 +27,7 @@ bot.on('message', msg => {
     var message = msg.content.substring(1);
     switch (message) {
         case 'gay':
-            var user = msg.guild.members.random();
+            //var user = msg.guild.members.random();
             msg.channel.send('Nice');
             break;
 
@@ -40,21 +41,22 @@ bot.on('message', msg => {
                     msg.channel.send(data);
                 });
             });
-
+	    break;
     
         default:
             msg.channel.send("Ah, ich hab' verkackt, mir ist egal");
 
             var channel = msg.member.voice.channel;
-
-            channel.join().then(connection => {
-                const dispatcher = connection.play('./Audio/Verkackt.mp3');
-                dispatcher.setVolume(0.4);
-                dispatcher.on("finish", end =>
-                {
-                    channel.leave();
-                });
-            }).catch(err => console.log(err));
-            break;
+	    if(channel != null){
+            	channel.join().then(connection => {
+                	const dispatcher = connection.play('./Audio/Verkackt.mp3');
+                	dispatcher.setVolume(0.4);
+                	dispatcher.on("finish", end =>
+                	{
+                	    channel.leave();
+                	});
+            	}).catch(err => console.log(err));
+            }
+	    break;
     }
 });
