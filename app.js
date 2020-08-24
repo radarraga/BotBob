@@ -12,19 +12,13 @@ bot.on('ready', () =>{
 });
 
 const { OpusEncoder } = require('@discordjs/opus');
+const { toUnicode } = require('punycode');
  
-// // Create the encoder.
-// // Specify 48kHz sampling rate and 2 channel size.
-// const encoder = new OpusEncoder(48000, 2);
- 
-// // Encode and decode.
-// const encoded = encoder.encode(buffer, 48000 / 100);
-// const decoded = encoder.decode(encoded, 48000 / 100);
-
+var isPlaying = false;
 
 bot.on('message', msg => {
     if(!msg.content.startsWith('!')) return;
-    var message = msg.content.substring(1);
+    var message = msg.content.substring(1).toLowerCase();
     switch (message) {
         case 'gay':
             //var user = msg.guild.members.random();
@@ -41,22 +35,46 @@ bot.on('message', msg => {
                     msg.channel.send(data);
                 });
             });
-	    break;
+            break;
+
+        case 'stop':
+            msg.member.voice.channel.leave();
+            isPlaying = false;
+            break;
+        
+        case 'kollegah':
+            var channel = msg.member.voice.channel;
+            var track = './Audio/Kollegah' + Math.floor(Math.random() * 5) + '.mp3';
+            PlayMedia(channel, track);
+            break;
+        
+        case 'hi':
+            var channel = msg.member.voice.channel;
+            PlayMedia(channel, './Audio/hi.mp3');
+            break;
+
     
         default:
             msg.channel.send("Ah, ich hab' verkackt, mir ist egal");
-
             var channel = msg.member.voice.channel;
-	    if(channel != null){
-            	channel.join().then(connection => {
-                	const dispatcher = connection.play('./Audio/Verkackt.mp3');
-                	dispatcher.setVolume(0.4);
-                	dispatcher.on("finish", end =>
-                	{
-                	    channel.leave();
-                	});
-            	}).catch(err => console.log(err));
-            }
-	    break;
+
+            PlayMedia(channel, './Audio/Verkackt.mp3');
+	        break;
     }
 });
+
+
+function PlayMedia(channel, file){
+    if(channel != null && isPlaying === false){
+        channel.join().then(connection => {
+            const dispatcher = connection.play(file);
+            isPlaying = true;
+            dispatcher.setVolume(0.5);
+            dispatcher.on("finish", end =>
+            {
+                channel.leave();
+                isPlaying = false;
+            });
+        }).catch(err => console.log(err));
+    }
+}
