@@ -44,7 +44,7 @@ bot.on('message', msg => {
         
         case 'kollegah':
             var track = './Audio/Kollegah' + Math.floor(Math.random() * 5) + '.mp3';
-            PlayMedia(msg, track);
+            PlayMedia(msg, track, 0.3);
             break;
         
         case 'hi':
@@ -65,13 +65,13 @@ bot.on('message', msg => {
 });
 
 
-function PlayMedia(msg, file){
+function PlayMedia(msg, file, volume = 0.5){
     var channel = msg.member.voice.channel;
     if(channel != null && isPlaying === false){
         channel.join().then(connection => {
             const dispatcher = connection.play(file);
             isPlaying = true;
-            dispatcher.setVolume(0.5);
+            dispatcher.setVolume(volume);
             dispatcher.on("finish", end =>
             {
                 channel.leave();
