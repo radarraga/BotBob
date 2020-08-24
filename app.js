@@ -2,6 +2,7 @@ const Discord   = require('discord.js');
 const bot       = new Discord.Client();
 const https     = require('https');
 const { connect } = require('http2');
+const request   = require('request');
 
 require('dotenv').config({path: __dirname + '/.env'});
 bot.login(process.env.TOKEN);
@@ -13,6 +14,7 @@ bot.on('ready', () =>{
 
 const { OpusEncoder } = require('@discordjs/opus');
 const { toUnicode } = require('punycode');
+const { kMaxLength } = require('buffer');
  
 var isPlaying = false;
 
@@ -34,6 +36,23 @@ bot.on('message', msg => {
                 resp.on('end', () => {
                     msg.channel.send(data);
                 });
+            });
+            break;
+
+        case 'wetter':
+            const options = {
+                url: 'https://api.openweathermap.org/data/2.5/weather?lat=47.498&lon=8.278&appid=ca4b66e82320e75865febcaba583b24a',
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Accept-Charset': 'utf-8',
+                    'User-Agent': 'my-reddit-client'
+                }
+            };
+            
+            request(options, function(err, res, body) {
+                let json = JSON.parse(body);
+                msg.channel.send('Auf dem Tromsberg hat es ' + parseInt(json.main.temp - 273.15) + '°C und ' + json.weather[0].description );
             });
             break;
 
