@@ -1,0 +1,65 @@
+[
+    {
+        "name": "gay",
+        "type": "message",
+        "message": "Niiccee",
+        "description": "Gay.ch"
+    },
+    {
+        "name": "hi",
+        "type": "audio",
+        "file": "hi.mp3",
+        "description": "Hi guys, Jeff Cavaliere, Athlean-X.com"
+    },
+    {
+        "name": "sage",
+        "type": "audio",
+        "file": "sage.mp3",
+        "description": "Sage voice line"
+    },
+    {
+        "name": "akktraktivität",
+        "type": "audio",
+        "file": "akktraktivität.mp3",
+        "volume": "0.9",
+        "description": "Definiton of akktraktivität"
+    },
+    {
+        "name": "asyl",
+        "type": "audio",
+        "file": "asyl.mp3",
+        "description": "I hät gern Asyl"
+    },
+    {
+        "name": "brimstone",
+        "type": "audio",
+        "file": "brimstone.mp3",
+        "description": "Brimstone voice line"
+    },
+    {
+        "name": "cristina",
+        "type": "audio",
+        "file": "cristina.mp3",
+        "description": "ID ODER PASS"
+    },
+    {
+        "name": "smoker",
+        "type": "audio",
+        "file": "smoker.mp3",
+        "description": "Scheiss smoker"
+    },
+    {
+        "name": "bob",
+        "type": "randomAudio",
+        "file": ["smoker.mp3", "akktraktivität.mp3"],
+        "volume": [0.5, 0.9],
+        "description": "Random bob voice line"
+    },
+    {
+        "name": "kollegah",
+        "type": "randomAudio",
+        "file": ["Kollegah0.mp3", "Kollegah1.mp3", "Kollegah2.mp3", "Kollegah3.mp3", "Kollegah4.mp3"],
+        "volume": [0.3, 0.3, 0.3, 0.3, 0.3],
+        "description": "Random Kollegah track"
+    }
+]
