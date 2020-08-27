@@ -66,5 +66,10 @@
         "name": "doggy",
         "type": "audio",
         "file": "doggy.mp3"
+    },
+    {
+        "name": "ficken",
+        "type": "audio",
+        "file": "ficken.mp3"
     }
 ]
