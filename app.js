@@ -73,7 +73,7 @@ bot.on('message', msg => {
                 break;
 
             case 'stop':
-                if(isPlaying) msg.member.voice.channel.leave();
+                if(isPlaying && msg.member.voice.channel != null) msg.member.voice.channel.leave();
                 isPlaying = false;
                 break;
 
