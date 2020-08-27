@@ -57,7 +57,7 @@ bot.on('message', msg => {
 
             case 'wetter':
                 const options = {
-                    url: 'https://api.openweathermap.org/data/2.5/weather?lat=47.498&lon=8.278&appid=' + process.env.OPEN_WEATHER_API,
+                    url: 'https://api.openweathermap.org/data/2.5/weather?lat=47.498&lon=8.278&lang=de&appid=' + process.env.OPEN_WEATHER_API,
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
@@ -68,7 +68,16 @@ bot.on('message', msg => {
                 
                 request(options, function(err, res, body) {
                     let json = JSON.parse(body);
-                    msg.channel.send('Auf dem Tromsberg hat es ' + parseInt(json.main.temp - 273.15) + '°C und ' + json.weather[0].description );
+                    const weatherEmbed = new Discord.MessageEmbed()
+                        .setColor('#0099ff')
+                        .setTitle("Wetter auf dem Tromsberg")
+                        .addFields(
+                            {name: "Temperatur", value: parseInt(json.main.temp - 273.15) + '°C'},
+                            {name: 'Beschreibung', value: json.weather[0].description},
+                            {name: "Wind", value: parseInt(json.wind.speed * 3.6)+ ' km/h'}
+                        )
+                        .setThumbnail('http://openweathermap.org/img/wn/' + json.weather[0].icon + '@2x.png')
+                    msg.channel.send(weatherEmbed);
                 });
                 break;
 
