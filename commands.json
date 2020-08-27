@@ -65,11 +65,13 @@
     {
         "name": "doggy",
         "type": "audio",
-        "file": "doggy.mp3"
+        "file": "doggy.mp3",
+        "description": "Nettes Lied by Katja"
     },
     {
         "name": "ficken",
         "type": "audio",
-        "file": "ficken.mp3"
+        "file": "ficken.mp3",
+        "description": "Nettes Lied by Sido"
     }
 ]
