@@ -73,5 +73,11 @@
         "type": "audio",
         "file": "ficken.mp3",
         "description": "Nettes Lied by Sido"
+    },
+    {
+        "name": "gibihm",
+        "type": "audio",
+        "file": "gibihm.mp3",
+        "description": "Baby gib ihm"
     }
 ]
