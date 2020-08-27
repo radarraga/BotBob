@@ -61,5 +61,10 @@
         "file": ["Kollegah0.mp3", "Kollegah1.mp3", "Kollegah2.mp3", "Kollegah3.mp3", "Kollegah4.mp3"],
         "volume": [0.3, 0.3, 0.3, 0.3, 0.3],
         "description": "Random Kollegah track"
+    },
+    {
+        "name": "doggy",
+        "type": "audio",
+        "file": "doggy.mp3"
     }
 ]
