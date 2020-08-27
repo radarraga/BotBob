@@ -17,6 +17,7 @@ const { OpusEncoder } = require('@discordjs/opus');
 const { toUnicode } = require('punycode');
 const { kMaxLength } = require('buffer');
 const { Z_NEED_DICT } = require('zlib');
+const { isNull } = require('util');
  
 var isPlaying = false;
 
@@ -41,20 +42,48 @@ bot.on('message', msg => {
         }
     });
 
+    if(message.substring(0,6) === 'insult'){
+        messageSent = true;
+        var mentionedUser = msg.mentions.users.first();
+
+        if(message.replace(/ /g, '').substring(6) == '@everyone'){
+            https.get('https://insult.mattbas.org/api/en/insult.txt?who=', (resp) => {
+                let data = '';
+                resp.on('data', (chunk) => {
+                    data += chunk;
+                });
+                resp.on('end', () => {
+                    msg.channel.send('@everyone' + data);
+                });
+            });
+            return;
+        }
+
+        if(mentionedUser === undefined) 
+        {
+            msg.channel.send('<@' + msg.author.id + '> is too stupid to insult someone.');
+            return;
+        }
+
+        if(mentionedUser['id'] === bot.user.toJSON().id)
+        {
+            msg.channel.send('Idiot.');
+            return;
+        }
+        
+        https.get('https://insult.mattbas.org/api/en/insult.txt?who=', (resp) => {
+            let data = '';
+            resp.on('data', (chunk) => {
+                data += chunk;
+            });
+            resp.on('end', () => {
+                msg.channel.send('<@' + mentionedUser['id'] + '>' + data);
+            });
+        });
+    }
+
     if(!messageSent){
         switch (message) {
-            case 'insult':
-                https.get('https://insult.mattbas.org/api/en/insult.txt', (resp) => {
-                    let data = '';
-                    resp.on('data', (chunk) => {
-                        data += chunk;
-                    });
-                    resp.on('end', () => {
-                        msg.channel.send(data);
-                    });
-                });
-                break;
-
             case 'wetter':
                 const options = {
                     url: 'https://api.openweathermap.org/data/2.5/weather?lat=47.498&lon=8.278&lang=de&appid=' + process.env.OPEN_WEATHER_API,
