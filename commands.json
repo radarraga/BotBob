@@ -79,5 +79,29 @@
         "type": "audio",
         "file": "gibihm.mp3",
         "description": "Baby gib ihm"
+    },
+    {
+        "name": "kacken",
+        "type": "audio",
+        "file": "kacken.mp3",
+        "description": "Ich gehe nackig kacken"
+    },
+    {
+        "name": "fesseln",
+        "type": "audio",
+        "file": "fesseln.mp3",
+        "description": "Ich fessel dich ans Bett <3"
+    },
+    {
+        "name": "sex",
+        "type": "audio",
+        "file": "sex.mp3",
+        "description": "Lululul"
+    },
+    {
+        "name": "wapbap",
+        "type": "audio",
+        "file": "wapbap.mp3",
+        "description": "This is just how it is :("
     }
 ]
