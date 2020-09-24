@@ -109,6 +109,32 @@ bot.on('message', msg => {
                     msg.channel.send(weatherEmbed);
                 });
                 break;
+            
+            case 'wetterm':
+                const options = {
+                    url: 'https://api.openweathermap.org/data/2.5/weather?lat=48.154&lon=11.471&lang=de&appid=' + process.env.OPEN_WEATHER_API,
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Accept-Charset': 'utf-8',
+                        'User-Agent': 'my-reddit-client'
+                    }
+                };
+                
+                request(options, function(err, res, body) {
+                    let json = JSON.parse(body);
+                    const weatherEmbed = new Discord.MessageEmbed()
+                        .setColor('#0099ff')
+                        .setTitle("Wetter in München")
+                        .addFields(
+                            {name: "Temperatur", value: parseInt(json.main.temp - 273.15) + '°C'},
+                            {name: 'Beschreibung', value: json.weather[0].description},
+                            {name: "Wind", value: parseInt(json.wind.speed * 3.6)+ ' km/h'}
+                        )
+                        .setThumbnail('http://openweathermap.org/img/wn/' + json.weather[0].icon + '@2x.png')
+                    msg.channel.send(weatherEmbed);
+                });
+                break;
 
             case 'stop':
                 if(isPlaying && msg.member.voice.channel != null) msg.member.voice.channel.leave();
