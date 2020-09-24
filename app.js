@@ -85,7 +85,7 @@ bot.on('message', msg => {
     if(!messageSent){
         switch (message) {
             case 'wetter':
-                const options = {
+                var options = {
                     url: 'https://api.openweathermap.org/data/2.5/weather?lat=47.498&lon=8.278&lang=de&appid=' + process.env.OPEN_WEATHER_API,
                     method: 'GET',
                     headers: {
@@ -111,7 +111,7 @@ bot.on('message', msg => {
                 break;
             
             case 'wetterm':
-                const options = {
+                var options = {
                     url: 'https://api.openweathermap.org/data/2.5/weather?lat=48.154&lon=11.471&lang=de&appid=' + process.env.OPEN_WEATHER_API,
                     method: 'GET',
                     headers: {
