@@ -3,19 +3,25 @@ const bot       = new Discord.Client();
 const https     = require('https');
 const { connect } = require('http2');
 const request   = require('request');
-const mongo     = require('mongodb');
+const mongoose  = require('mongoose');
+
+const Player	= require('./models/player.js');
 
 var url = "mongodb://localhost:27017/users";
 
-var client = mongo.MongoClient;
-
-client.connect(url, function(err, db){
-    if(err) console.info(err);
-    console.log('Connected to the db.');
-})
-
 require('dotenv').config({path: __dirname + '/.env'});
 bot.login(process.env.TOKEN);
+
+mongoose.connect(url, {
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+	useCreateIndex: true,
+	useFindAndModify: false
+}).then(() => {
+	console.log('connected to the db!')
+}).catch(err => {
+	console.log('Error connecting to the db: ' + err.message)
+});
 
 var commands = require('./commands.json');
 
@@ -146,7 +152,11 @@ bot.on('message', msg => {
                 });
                 break;
 
-            case 'stop':
+        
+	    case 'players':
+		Player
+	
+	    case 'stop':
                 if(isPlaying && msg.member.voice.channel != null) msg.member.voice.channel.leave();
                 isPlaying = false;
                 break;
