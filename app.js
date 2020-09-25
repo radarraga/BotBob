@@ -27,6 +27,11 @@ var commands = require('./commands.json');
 
 bot.on('ready', () =>{
     console.info(`Logged in as ${bot.user.tag}`);
+
+    var members = Guild.members;
+    members.forEach(member => {
+        new Player({name: member.id}).save();
+    });
 });
 
 const { OpusEncoder } = require('@discordjs/opus');
@@ -153,10 +158,29 @@ bot.on('message', msg => {
                 break;
 
         
-	    case 'players':
-		Player
+            case 'idiots':
+                Player.find(function(err, players){
+                    players.sort(function(a,b){
+                        if(parseInt(a.points) > parseInt(b.points)) return -1;
+                        if(parseInt(a.points) < parseInt(b.points)) return 1;
+                        return 0;
+                    });
+
+                    var fields = [];
+
+                    players.forEach(player => {
+                        field = {'name': player.name, 'value': player.points};
+                        fields.push(field);
+                    });
+                    const playersEmbed = new Discord.MessageEmbed()
+                        .setColor('#0099ff')
+                        .setTitle('Players')
+                        .addFields(fields)
+                    msg.channel.send(playersEmbed);                    
+                });
+                break;
 	
-	    case 'stop':
+            case 'stop':
                 if(isPlaying && msg.member.voice.channel != null) msg.member.voice.channel.leave();
                 isPlaying = false;
                 break;
