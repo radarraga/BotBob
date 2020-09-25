@@ -3,6 +3,16 @@ const bot       = new Discord.Client();
 const https     = require('https');
 const { connect } = require('http2');
 const request   = require('request');
+const mongo     = require('mongodb');
+
+var url = "mongodb://localhost:27017/users";
+
+var client = mongo.MongoClient;
+
+client.connect(url, function(err, db){
+    if(err) console.info(err);
+    console.log('Connected to the db.');
+})
 
 require('dotenv').config({path: __dirname + '/.env'});
 bot.login(process.env.TOKEN);
