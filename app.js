@@ -71,6 +71,8 @@ bot.on('message', async function(msg) {
         messageSent = true;
         var amount = message.substring(6);
 
+        if(amount === "all")Gamble("all", msg);
+
         if(isNaN(amount)) {
             msg.channel.send("Please enter a number :(");
             return;
@@ -345,15 +347,12 @@ function CalculateKing(){
             var topmember = value.guild.members.cache.get(topplayer.id);
             topmember.roles.add(role);
         });
-
-
-
-    })
+    });
 }
 
 
 function Gamble(amount, msg){
-    if(amount <= 0){
+    if(isNaN(amount) && amount <= 0){
         msg.channel.send("Please gamble with a positive amount.");
         return;
     }
@@ -367,6 +366,7 @@ function Gamble(amount, msg){
                     msg.channel.send("You do not have any points at the moment :((. You have to play more!");
                     return;
                 }
+                if(amount == "all") amount = player.points;
 
                 if(player.points < amount){
                     msg.channel.send(`You don't have ${amount} points :(`);
