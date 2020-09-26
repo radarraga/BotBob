@@ -192,7 +192,7 @@ bot.on('message', async function(msg) {
                 Gamble(10, msg);
                 break;
         
-            case 'idiots':
+            case 'topsuchtis':
                 Player.find(function(err, players){
                     players.sort(function(a,b){
                         if(parseInt(a.points) > parseInt(b.points)) return -1;
@@ -202,9 +202,14 @@ bot.on('message', async function(msg) {
 
                     var fields = [];
 
+                    var i = 1;
+
                     players.forEach(player => {
-                        field = {'name': player.name, 'value': player.points};
-                        fields.push(field);
+                        if(i < 6){
+                            field = {'name': i + '. ' + player.name, 'value': player.points};
+                            fields.push(field);
+                        }
+                        i++;
                     });
                     const playersEmbed = new Discord.MessageEmbed()
                         .setColor('#0099ff')
