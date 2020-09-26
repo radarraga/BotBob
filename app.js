@@ -353,6 +353,10 @@ function CalculateKing(){
 
 
 function Gamble(amount, msg){
+    if(amount <= 0){
+        msg.channel.send("Please gamble with a positive amount.");
+        return;
+    }
     Player.findOne({id: msg.author.id}, function(err, player){
         if(err){
             console.log(err);
