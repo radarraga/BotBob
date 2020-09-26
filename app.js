@@ -9,6 +9,8 @@ const Player	= require('./models/player.js');
 
 var url = "mongodb://localhost:27017/botbob";
 
+isConnected = false;
+
 require('dotenv').config({path: __dirname + '/.env'});
 bot.login(process.env.TOKEN);
 
@@ -27,6 +29,7 @@ var commands = require('./commands.json');
 
 bot.on('ready', () =>{
     console.info(`Logged in as ${bot.user.tag}`);
+    isConnected = true;
 });
 
 const { OpusEncoder } = require('@discordjs/opus');
@@ -39,6 +42,9 @@ const { map } = require('async');
 const { update } = require('./models/player.js');
  
 var isPlaying = false;
+
+setInterval(CheckPlayers, 5000);
+
 
 bot.on('message', async function(msg) {
     if(!msg.content.startsWith('!')) return;
@@ -162,6 +168,32 @@ bot.on('message', async function(msg) {
             case 'update':
                 Update(msg);
                 break;
+
+            case 'gamble':
+                Player.findOne({id: msg.author.id}, function(err, player){
+                    if(err){
+                        console.log(err);
+                        return;
+                    }else{
+                        if(player){
+                            if(player.points == 0){
+                                msg.channel.send("You do not have any points at the moment :((. You have to play more!")
+                            }
+                            var pointsBefore = player.points;
+                            var rnd = Math.floor(Math.random() * 9);
+                            var newPoints = 0;
+                            var weights = [0.1, 0.2, 0.25, 0.5, 1, 2, 4, 5, 10];
+                            newPoints = Math.floor(pointsBefore * weights[rnd]);
+                            player.points = newPoints;
+                            player.save();     
+                            msg.channel.send(`You had ${pointsBefore} points. Now you have ${newPoints}. gg`);
+                        }else{
+                            Init(msg);
+                            msg.channel.send("Uups, I had to register you first. You do not have any points yet.")
+                        }
+                    }
+                });
+                break;
         
             case 'idiots':
                 Player.find(function(err, players){
@@ -239,7 +271,6 @@ async function Init(msg){
 function Update(msg){
     var members = msg.guild.members.fetch();
 
-
     Promise.resolve(members).then(function(value){
         value.forEach(member => {
             Player.findOne({id: member['id']}, function(err, foundPlayer){
@@ -256,6 +287,37 @@ function Update(msg){
             });
         });
     });
+}
+
+var channels = process.env.CHANNELS.split(' ');
+
+function CheckPlayers(){
+    console.log("Checking if in voice...");
+
+    if(isConnected){
+        channels.forEach(channelId => {
+            var channel = bot.channels.fetch(channelId);
+
+            Promise.resolve(channel).then(function(value){
+                members = value.members;
+                members.forEach(member => {
+                    Player.findOne({id: member['id']}, function(err, foundPlayer){
+                        if(err){
+                            console.log(err);
+                            return;
+                        }else{
+                            if(foundPlayer){
+                                foundPlayer.points = foundPlayer.points + 1;
+                                foundPlayer.save();
+                            }
+                        }
+                    });
+                });
+            });
+        });
+
+    }
+
 }
 
 
