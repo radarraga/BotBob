@@ -67,6 +67,18 @@ bot.on('message', async function(msg) {
         }
     });
 
+    if(message.substring(0,6) === 'gamble'){
+        messageSent = true;
+        var amount = message.substring(6);
+
+        if(isNaN(amount)) {
+            msg.channel.send("Please enter a number :(");
+            return;
+        }
+
+        Gamble(Math.floor(amount), msg);
+    }
+
     if(message.substring(0,6) === 'insult'){
         messageSent = true;
         var mentionedUser = msg.mentions.users.first();
@@ -184,14 +196,6 @@ bot.on('message', async function(msg) {
                         }
                     }
                 });
-                break;
-
-            case 'gamble':
-                Gamble(1, msg);
-                break;
-
-            case 'gamble10':
-                Gamble(10, msg);
                 break;
         
             case 'topsuchtis':
@@ -321,7 +325,7 @@ function CheckPlayers(){
 }
 
 
-function Gamble(times, msg){
+function Gamble(amount, msg){
     Player.findOne({id: msg.author.id}, function(err, player){
         if(err){
             console.log(err);
@@ -332,30 +336,26 @@ function Gamble(times, msg){
                     msg.channel.send("You do not have any points at the moment :((. You have to play more!");
                     return;
                 }
-                var newPoints = [];
-                var pointsBefore = player.points;
+
+                if(player.points < amount){
+                    msg.channel.send(`You don't have ${amount} points :(`);
+                    return;
+                }
 
                 var weights = [0, 2];
                 var rnd = Math.floor(Math.random() * weights.length);
 
-                var answer = '';
+                var gainedPoints = amount * weights[rnd];
 
-                newPoints.push(Math.floor(pointsBefore * weights[rnd]));
-                answer += newPoints[newPoints.length - 1] + ', ';
-
-                for (let i = 1; i < times; i++) {
-                    var rnd = Math.floor(Math.random() * weights.length);
-                    newPoints.push(Math.floor(newPoints[newPoints.length - 1] * weights[rnd]));
-                    answer += newPoints[newPoints.length - 1]+ ', ';
-                }
-
-
-                player.points = newPoints[newPoints.length - 1];
+                player.points = player.points - amount + gainedPoints;
                 player.save();
-                answer = answer.slice(0, answer.length - 2);
+
+
                 var point = 'points';
-                if(pointsBefore === 1) point = 'point';
-                msg.channel.send(`You had **${pointsBefore}** ${point}. Now you have **${answer}**. gg`);
+                if(amount === 1) point = 'point';
+
+                if(gainedPoints == 0) msg.channel.send(`You lost **${amount}** ${point}.`);
+                else msg.channel.send(`You won **${gainedPoints}** ${point}. gg`);
             }else{
                 Init(msg);
                 msg.channel.send("Uups, I had to register you first. You do not have any points yet.")
