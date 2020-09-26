@@ -354,8 +354,8 @@ function Gamble(amount, msg){
                 var point = 'points';
                 if(amount === 1) point = 'point';
 
-                if(gainedPoints == 0) msg.channel.send(`You lost **${amount}** ${point}.`);
-                else msg.channel.send(`You won **${gainedPoints / 2}** ${point}. gg`);
+                if(gainedPoints == 0) msg.channel.send(`You lost **${amount}** ${point}. gg ez wp`);
+                else msg.channel.send(`You won **${gainedPoints / 2}** ${point}.`);
             }else{
                 Init(msg);
                 msg.channel.send("Uups, I had to register you first. You do not have any points yet.")
