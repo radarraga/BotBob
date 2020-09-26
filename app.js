@@ -342,7 +342,6 @@ function Gamble(times, msg){
 
                 for (let i = 1; i < times; i++) {
                     var rnd = Math.floor(Math.random() * weights.length);
-                    console.log(`${newPoints}, ${newPoints[newPoints.length - 1]}, ${weights[rnd]}`);
                     newPoints.push(Math.floor(newPoints[newPoints.length - 1] * weights[rnd]));
                     answer += newPoints[newPoints.length - 1]+ ', ';
                 }
