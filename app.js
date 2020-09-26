@@ -329,7 +329,8 @@ function Gamble(times, msg){
         }else{
             if(player){
                 if(player.points == 0){
-                    msg.channel.send("You do not have any points at the moment :((. You have to play more!")
+                    msg.channel.send("You do not have any points at the moment :((. You have to play more!");
+                    return;
                 }
                 var newPoints = [];
                 var pointsBefore = player.points;
