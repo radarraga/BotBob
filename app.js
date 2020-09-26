@@ -335,7 +335,7 @@ function Gamble(times, msg){
                 var newPoints = [];
                 var pointsBefore = player.points;
 
-                var weights = [0, 0, 0, 0, 0, 0, 1, 1.5, 2, 4, 5, 8, 10];
+                var weights = [0, 2];
                 var rnd = Math.floor(Math.random() * weights.length);
 
                 var answer = '';
