@@ -185,29 +185,11 @@ bot.on('message', async function(msg) {
                 break;
 
             case 'gamble':
-                Player.findOne({id: msg.author.id}, function(err, player){
-                    if(err){
-                        console.log(err);
-                        return;
-                    }else{
-                        if(player){
-                            if(player.points == 0){
-                                msg.channel.send("You do not have any points at the moment :((. You have to play more!")
-                            }
-                            var pointsBefore = player.points;
-                            var rnd = Math.floor(Math.random() * 9);
-                            var newPoints = 0;
-                            var weights = [0.1, 0.2, 0.25, 0.5, 1, 2, 4, 5, 10];
-                            newPoints = Math.floor(pointsBefore * weights[rnd]);
-                            player.points = newPoints;
-                            player.save();     
-                            msg.channel.send(`You had **${pointsBefore}** points. Now you have **${newPoints}**. gg`);
-                        }else{
-                            Init(msg);
-                            msg.channel.send("Uups, I had to register you first. You do not have any points yet.")
-                        }
-                    }
-                });
+                Gamble(1, msg);
+                break;
+
+            case 'gamble10':
+                Gamble(10, msg);
                 break;
         
             case 'idiots':
@@ -307,8 +289,6 @@ function Update(msg){
 var channels = process.env.CHANNELS.split(' ');
 
 function CheckPlayers(){
-    console.log("Checking if in voice...");
-
     if(isConnected){
         channels.forEach(channelId => {
             var channel = bot.channels.fetch(channelId);
@@ -330,9 +310,49 @@ function CheckPlayers(){
                 });
             });
         });
-
     }
+}
 
+
+function Gamble(times, msg){
+    Player.findOne({id: msg.author.id}, function(err, player){
+        if(err){
+            console.log(err);
+            return;
+        }else{
+            if(player){
+                if(player.points == 0){
+                    msg.channel.send("You do not have any points at the moment :((. You have to play more!")
+                }
+                var newPoints = [];
+                var pointsBefore = player.points;
+
+                var weights = [0.1, 0.125, 0.2, 0.25, 0.5, 0.75, 1, 1.5, 2, 4, 5, 8, 10];
+                var rnd = Math.floor(Math.random() * weights.length);
+
+                var answer = '';
+
+                newPoints.push(Math.floor(pointsBefore * weights[rnd]));
+                answer += newPoints[newPoints.length - 1] + ', ';
+
+                for (let i = 1; i < times; i++) {
+                    var rnd = Math.floor(Math.random() * weights.length);
+                    console.log(`${newPoints}, ${newPoints[newPoints.length - 1]}, ${weights[rnd]}`);
+                    newPoints.push(Math.floor(newPoints[newPoints.length - 1] * weights[rnd]));
+                    answer += newPoints[newPoints.length - 1]+ ', ';
+                }
+
+
+                player.points = newPoints[newPoints.length - 1];
+                player.save();
+                answer = answer.slice(0, answer.length - 2);
+                msg.channel.send(`You had **${pointsBefore}** points. Now you have **${answer}**. gg`);
+            }else{
+                Init(msg);
+                msg.channel.send("Uups, I had to register you first. You do not have any points yet.")
+            }
+        }
+    });
 }
 
 
