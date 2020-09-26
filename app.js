@@ -306,6 +306,7 @@ function CheckPlayers(){
 
             Promise.resolve(channel).then(function(value){
                 members = value.members;
+                if(members.size != 0) CalculateKing();
                 members.forEach(member => {
                     Player.findOne({id: member['id']}, function(err, foundPlayer){
                         if(err){
@@ -322,6 +323,32 @@ function CheckPlayers(){
             });
         });
     }
+}
+
+function CalculateKing(){
+    Player.find(function(err, players){
+
+        var topplayer = {points: 0};
+        players.forEach(player => {
+            if(player.points > topplayer.points) topplayer = player;
+        });
+
+        channel = bot.channels.fetch(channels[0]);
+        Promise.resolve(channel).then(function(value){
+            var role = value.guild.roles.cache.find(role => role.name == "KING");
+
+            var members = value.members;
+            members.forEach(member => {
+                if(member.id == topplayer.id) return;
+                member.roles.remove(role);
+            });
+            var topmember = value.guild.members.cache.get(topplayer.id);
+            topmember.roles.add(role);
+        });
+
+
+
+    })
 }
 
 
@@ -342,10 +369,10 @@ function Gamble(amount, msg){
                     return;
                 }
 
-                var weights = [0, 2];
+                var weights = [0, 0 ,1.5, 1.5, 2];
                 var rnd = Math.floor(Math.random() * weights.length);
 
-                var gainedPoints = amount * weights[rnd];
+                var gainedPoints = Math.round(amount * weights[rnd]);
 
                 player.points = player.points - amount + gainedPoints;
                 player.save();
@@ -353,6 +380,8 @@ function Gamble(amount, msg){
 
                 var point = 'points';
                 if(amount === 1) point = 'point';
+
+                CalculateKing();
 
                 if(gainedPoints == 0) msg.channel.send(`You lost **${amount}** ${point}. gg ez wp`);
                 else msg.channel.send(`You won **${gainedPoints / 2}** ${point}.`);
