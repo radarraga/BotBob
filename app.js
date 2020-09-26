@@ -201,7 +201,7 @@ bot.on('message', async function(msg) {
                             newPoints = Math.floor(pointsBefore * weights[rnd]);
                             player.points = newPoints;
                             player.save();     
-                            msg.channel.send(`You had ${pointsBefore} points. Now you have ${newPoints}. gg`);
+                            msg.channel.send(`You had **${pointsBefore}** points. Now you have **${newPoints}**. gg`);
                         }else{
                             Init(msg);
                             msg.channel.send("Uups, I had to register you first. You do not have any points yet.")
