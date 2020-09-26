@@ -181,7 +181,8 @@ bot.on('message', async function(msg) {
                             msg.channel.send("Write !init to add your username to the database");
                         }
                     }
-                })
+                });
+                break;
 
             case 'gamble':
                 Player.findOne({id: msg.author.id}, function(err, player){
