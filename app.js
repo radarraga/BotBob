@@ -369,7 +369,7 @@ function Gamble(amount, msg){
                     return;
                 }
 
-                var weights = [0, 2];
+                var weights = [2, 2];
                 var rnd = Math.floor(Math.random() * weights.length);
 
                 var gainedPoints = amount * weights[rnd];
