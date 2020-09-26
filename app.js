@@ -169,6 +169,20 @@ bot.on('message', async function(msg) {
                 Update(msg);
                 break;
 
+            case 'points':
+                Player.findOne({id: msg.author.id}, function(err, player){
+                    if(err){
+                        console.log(err);
+                        return;
+                    }else{
+                        if(player){
+                            msg.channel.send(`You have ${player.points} points.`);
+                        }else{
+                            msg.channel.send("Write !init to add your username to the database");
+                        }
+                    }
+                })
+
             case 'gamble':
                 Player.findOne({id: msg.author.id}, function(err, player){
                     if(err){
