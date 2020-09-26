@@ -1,7 +1,8 @@
 var mongoose    = require('mongoose');
 
 var PlayerSchema = new mongoose.Schema({
-	name: {type: String, unique: true},
+	id: String,
+	name: String,
 	points: {type: Number, default: 0}
 });
 

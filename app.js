@@ -7,16 +7,16 @@ const mongoose  = require('mongoose');
 
 const Player	= require('./models/player.js');
 
-var url = "mongodb://localhost:27017/users";
+var url = "mongodb://localhost:27017/botbob";
 
 require('dotenv').config({path: __dirname + '/.env'});
 bot.login(process.env.TOKEN);
 
 mongoose.connect(url, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-	useCreateIndex: true,
-	useFindAndModify: false
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
 }).then(() => {
 	console.log('connected to the db!')
 }).catch(err => {
@@ -27,11 +27,6 @@ var commands = require('./commands.json');
 
 bot.on('ready', () =>{
     console.info(`Logged in as ${bot.user.tag}`);
-
-    var members = Guild.members;
-    members.forEach(member => {
-        new Player({name: member.id}).save();
-    });
 });
 
 const { OpusEncoder } = require('@discordjs/opus');
@@ -39,10 +34,13 @@ const { toUnicode } = require('punycode');
 const { kMaxLength } = require('buffer');
 const { Z_NEED_DICT } = require('zlib');
 const { isNull } = require('util');
+const { disconnect } = require('process');
+const { map } = require('async');
+const { update } = require('./models/player.js');
  
 var isPlaying = false;
 
-bot.on('message', msg => {
+bot.on('message', async function(msg) {
     if(!msg.content.startsWith('!')) return;
     if(msg.channel.name != 'bot') return;
     var message = msg.content.substring(1).toLowerCase();
@@ -156,7 +154,14 @@ bot.on('message', msg => {
                     msg.channel.send(weatherEmbed);
                 });
                 break;
+            
+            case 'init':
+                Init(msg);
+                break;
 
+            case 'update':
+                Update(msg);
+                break;
         
             case 'idiots':
                 Player.find(function(err, players){
@@ -207,6 +212,51 @@ bot.on('message', msg => {
         }
     }
 });
+
+async function Init(msg){
+    var members = msg.guild.members.fetch();
+
+
+    Promise.resolve(members).then(function(value){
+        value.forEach(member => {
+            Player.findOne({id: member['id']}, function(err, foundPlayer){
+                if (err){
+                    console.log(err);
+                    return;
+                }else{
+                    if(foundPlayer) console.log(member['id'] + ' already registered.');
+                    else{
+                        console.log('saving with id ' + member['id']);
+                        new Player({name: member['nickname'], id: member['id']}).save();
+                    } 
+                }
+            });
+        });
+    });
+}
+
+
+function Update(msg){
+    var members = msg.guild.members.fetch();
+
+
+    Promise.resolve(members).then(function(value){
+        value.forEach(member => {
+            Player.findOne({id: member['id']}, function(err, foundPlayer){
+                if (err){
+                    console.log(err);
+                    return;
+                }else{
+                    if(foundPlayer) {
+                        foundPlayer.name = member['nickname'];
+                        foundPlayer.save();
+                    };
+                    
+                }
+            });
+        });
+    });
+}
 
 
 function PlayMedia(msg, file, volume = 0.5){
