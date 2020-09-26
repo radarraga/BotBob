@@ -65,7 +65,7 @@
     {
         "name": "katja",
         "type": "randomAudio",
-        "file": ["doogy.mp3", "sex.mp3", "fesseln.mp3"],
+        "file": ["doggy.mp3", "sex.mp3", "fesseln.mp3"],
         "volume": [0.5, 0.5, 0.5],
         "description": "Random katja track"
     },
