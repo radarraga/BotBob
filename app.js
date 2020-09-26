@@ -176,7 +176,9 @@ bot.on('message', async function(msg) {
                         return;
                     }else{
                         if(player){
-                            msg.channel.send(`You have ${player.points} points.`);
+                            var points = 'points';
+                            if(player.points == 1) points = 'point';
+                            msg.channel.send(`You have ${player.points} ${points}.`);
                         }else{
                             msg.channel.send("Write !init to add your username to the database");
                         }
@@ -350,7 +352,9 @@ function Gamble(times, msg){
                 player.points = newPoints[newPoints.length - 1];
                 player.save();
                 answer = answer.slice(0, answer.length - 2);
-                msg.channel.send(`You had **${pointsBefore}** points. Now you have **${answer}**. gg`);
+                var point = 'points';
+                if(pointsBefore === 1) point = 'point';
+                msg.channel.send(`You had **${pointsBefore}** ${point}. Now you have **${answer}**. gg`);
             }else{
                 Init(msg);
                 msg.channel.send("Uups, I had to register you first. You do not have any points yet.")
